@@ -1,0 +1,10 @@
+[
+  {
+    "ParameterKey": "RepositoryName",
+    "ParameterValue": "mock_test1"
+  },
+  {
+    "ParameterKey": "BranchName",
+    "ParameterValue": "master"
+  }
+]
