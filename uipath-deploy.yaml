@@ -111,10 +111,9 @@ Resources:
             - "s3:GetObjectVersion"
             - "s3:ListBucket"
             Resource:
-            #- Fn::Sub: arn:aws:s3:::codepipeline-${AWS::Region}-*
             - Fn::Sub: arn:aws:s3:::${S3ArtifactStore}/*
             - Fn::Sub: arn:aws:s3:::${S3ArtifactStore}
-  BuildDockerImageProject:
+  PackageBuildProject:
     Type: AWS::CodeBuild::Project
     Properties:
       Description: Build the Docker image based on the Dockerfile present in the source
@@ -128,21 +127,7 @@ Resources:
         Type: WINDOWS_CONTAINER
         ComputeType: BUILD_GENERAL1_MEDIUM
         Image:
-          Fn::Join: 
-            -':'
-            -
-                - Fn::ImportValue:
-                    !Sub "${CodeBuildImageStackName}-EcrUri"
-                - "latest"
-        EnvironmentVariables:
-        - Name: "AWS_DEFAULT_REGION"
-          Value: "us-east-1"
-        - Name: "AWS_ACCOUNT_ID"
-          Value: !Ref "AWS::AccountId"
-        - Name: "IMAGE_REPO_NAME"
-          Value: "uipath-robot-build"
-        - Name: "IMAGE_TAG"
-          Value: "latest"
+          Fn::Join: [':', ["Fn::ImportValue": !Sub "${CodeBuildImageStackName}-EcrUri", "latest"]]
         ImagePullCredentialsType: CODEBUILD
       TimeoutInMinutes: 15
   CodePipelineDeploy:
@@ -171,9 +156,9 @@ Resources:
             BranchName:
               Ref: BranchName
           RunOrder: 1
-      - Name: DockerBuild
+      - Name: PackageBuildAndTest
         Actions:
-        - Name: BuildDocker
+        - Name: PackageBuild
           ActionTypeId:
             Category: Build
             Owner: AWS
@@ -183,6 +168,6 @@ Resources:
           - Name: SourceOutput
           Configuration:
             ProjectName:
-              Ref: BuildDockerImageProject
+              Ref: PackageBuildProject
           RunOrder: 1
           

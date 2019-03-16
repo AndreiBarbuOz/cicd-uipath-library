@@ -6,5 +6,9 @@
   {
     "ParameterKey": "BranchName",
     "ParameterValue": "master"
+  },
+  {
+	"ParameterKey": "CodeBuildImageStackName",
+	"ParameterValue": "docker-image-repository"
   }
 ]
