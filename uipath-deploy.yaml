@@ -57,8 +57,8 @@ Resources:
             - "codebuild:StartBuild"
             - "codebuild:BatchGetBuilds"
             Resource:
-            - Fn::Sub: arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:project/${BuildDockerImageProject}
-            - Fn::Sub: arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:build/${BuildDockerImageProject}:*
+            - Fn::Sub: arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:project/${PackageBuildProject}
+            - Fn::Sub: arn:aws:codebuild:${AWS::Region}:${AWS::AccountId}:build/${PackageBuildProject}:*
   CodeBuildRole:
     Type: "AWS::IAM::Role"
     Properties:
@@ -126,7 +126,7 @@ Resources:
       Environment:
         Type: WINDOWS_CONTAINER
         ComputeType: BUILD_GENERAL1_MEDIUM
-        Image:
+        Image: 
           Fn::Join: [':', ["Fn::ImportValue": !Sub "${CodeBuildImageStackName}-EcrUri", "latest"]]
         ImagePullCredentialsType: CODEBUILD
       TimeoutInMinutes: 15
