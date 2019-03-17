@@ -89,14 +89,9 @@ Resources:
             - Fn::Sub: arn:aws:codecommit:${AWS::Region}:${AWS::AccountId}:${RepositoryName}
           - Effect: "Allow"
             Action:
-            - "iam:Get*"
-            - "iam:List*"
-            - "logs:Describe*"
-            - "logs:Get*"
-            - "tag:Get*"
-            - "*"
+            - "ssm:GetParameters"
             Resource:
-            - "*"
+            - Fn::Sub: arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/orchestrator-*
           - Effect: "Allow"
             Action:
             - "logs:CreateLogGroup"
